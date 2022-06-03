@@ -13,7 +13,7 @@ hr {
   color: var(--theme-border-color);
 }
 
-#main-container {
+#app {
   max-width: var(--theme-container-max-width);
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@ hr {
   color: var(--theme-link-hover-color);
 }
 
-#add-review-button {
+#add-customer-review {
   margin: 0 0 0 auto;
 }
 .fade {
@@ -75,8 +75,19 @@ hr {
 }
 /* General - end */
 /* Starts - start */
-.stars {
+#modal-add-review .stars {
   cursor: pointer;
+}
+
+#modal-add-review .stars:hover .star path {
+  fill: var(--theme-teal) !important;
+}
+
+#modal-add-review .stars .star:hover ~ .star path {
+  fill: var(--theme-gray-300) !important;
+}
+
+.stars {
   display: inline-block;
 }
 
@@ -86,14 +97,8 @@ hr {
   transition: background-color 0.2s ease-in-out;
 }
 
-.stars:hover .star path {
-  fill: var(--theme-teal) !important;
-}
 .stars .star path {
   fill: var(--theme-gray-300);
-}
-.stars .star:hover ~ .star path {
-  fill: var(--theme-gray-300) !important;
 }
 
 .stars[data-rating] .star path {
