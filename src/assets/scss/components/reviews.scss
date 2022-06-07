@@ -1,0 +1,31 @@
+.review {
+  .stars {
+    margin-bottom: 0.5rem;
+  }
+
+  .stars .star {
+    height: 0.8rem;
+  }
+
+  .review-title {
+    font-size: 1.2rem;
+  }
+
+  .review-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--theme-gray-500);
+  }
+
+  .review-date {
+    font-size: 0.8rem;
+    color: var(--theme-gray-400);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .review-comment {
+    font-size: 0.9rem;
+    color: var(--theme-gray-600);
+  }
+}

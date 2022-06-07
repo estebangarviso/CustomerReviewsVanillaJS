@@ -1,0 +1,26 @@
+// Change variables prefix
+$variable-prefix: 'theme';
+// Colors
+$primary: #1c1c1c;
+$secondary: #ffe002;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ff9a52;
+$danger: #dc3545;
+$light: #f5edd3;
+$dark: #352b0b;
+
+// Typography and Headings
+$font-size-root: 16px;
+$font-size-base: 0.875rem;
+$font-family-base: 'Helvetica Neue LT Std', var(--#{$variable-prefix}font-sans-serif);
+$headings-font-family: 'Helvetica Neue LT Std Condensed', var(--#{$variable-prefix}font-sans-serif);
+$headings-font-weight: 700;
+$headings-line-height: 1.2;
+$headings-color: $dark;
+
+// Modals
+$modal-show-transform: translateY(0);
+
+// Reboot
+$hr-color: var(--#{$variable-prefix}gray-300);

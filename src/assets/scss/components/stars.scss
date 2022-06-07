@@ -1,0 +1,29 @@
+.stars {
+  display: inline-block;
+  .star {
+    height: 1.5rem;
+    margin: 0.05rem;
+    transition: background-color 0.2s ease-in-out;
+    path {
+      fill: var(--#{$variable-prefix}gray-300);
+    }
+  }
+
+  &[data-rating] .star path {
+    fill: var(--#{$variable-prefix}teal);
+  }
+  &[data-rating='0'] .star path {
+    fill: var(--#{$variable-prefix}gray-300);
+  }
+  @for $rating from 1 through 5 {
+    $i: 0.5;
+    &[data-rating='#{$i}'] .star:nth-child(#{$rating}) ~ .star path,
+    &[data-rating='#{$i}'] .star:nth-child(#{$rating}) path:nth-child(1) {
+      fill: var(--#{$variable-prefix}gray-300);
+    }
+    &[data-rating='#{$i + 0.5}'] .star:nth-child(#{$rating}) ~ .star path {
+      fill: var(--#{$variable-prefix}gray-300);
+    }
+    $i: $i + 0.5;
+  }
+}

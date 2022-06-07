@@ -1,0 +1,81 @@
+// Override variables
+@import './assets/scss/variables.scss';
+// Add bootstrap reboot
+@import '../node_modules/bootstrap/scss/bootstrap-reboot.scss';
+// Components
+@import './assets/scss/components/fonts.scss';
+@import './assets/scss/components/transitions.scss';
+@import './assets/scss/components/buttons.scss';
+@import './assets/scss/components/modals.scss';
+@import './assets/scss/components/stars.scss';
+@import './assets/scss/components/reviews.scss';
+@import './assets/scss/components/forms.scss';
+// Custom styles
+hr {
+  color: var(--#{$variable-prefix}gray-300);
+}
+
+#app {
+  max-width: var(--#{$variable-prefix}container-max-width);
+  display: flex;
+  flex-direction: column;
+  margin: 15px auto;
+  padding: 15px;
+  border: 1px solid var(--#{$variable-prefix}border-color);
+  border-radius: var(--#{$variable-prefix}border-radius);
+}
+
+.container {
+  max-width: var(--#{$variable-prefix}container-max-width);
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.pl-1 {
+  padding-left: 1rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.link {
+  color: var(--#{$variable-prefix}link-color);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--#{$variable-prefix}link-hover-color);
+}
+
+#add-customer-review {
+  margin: 0 0 0 auto;
+}
+
+#modal-add-review {
+  .stars {
+    cursor: pointer;
+    &:hover .star path {
+      fill: var(--#{$variable-prefix}teal) !important;
+    }
+    .star:hover ~ .star path {
+      fill: var(--#{$variable-prefix}gray-300) !important;
+    }
+  }
+}
