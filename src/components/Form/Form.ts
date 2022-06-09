@@ -108,6 +108,8 @@ export default abstract class Form extends Component {
   }
 
   afterValidate(result: FormValidate) {
+    console.log({ result });
+
     const resetErrors = (hook) => {
       // Remove errors from form to avoid duplicate errors
       this._errors = [];

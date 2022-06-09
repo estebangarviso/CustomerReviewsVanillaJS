@@ -8,10 +8,52 @@ export default class CustomerReviews extends Component implements CustomerReview
 
   constructor() {
     super();
-    const customerReviews = localStorage.getItem('customerReviews');
-    if (customerReviews) {
-      this._customerReviews = JSON.parse(customerReviews);
-    }
+    // const customerReviews = localStorage.getItem('customerReviews');
+    // if (customerReviews) {
+    //   this._customerReviews = JSON.parse(customerReviews);
+    // }
+    this._customerReviews = [
+      {
+        id: 1,
+        rating: 5,
+        title: 'Great product',
+        comment: 'This product is awesome!',
+        name: 'John Doe',
+        date: '2019-01-01'
+      },
+      {
+        id: 2,
+        rating: 4,
+        title: 'Good product',
+        comment: 'This product is good!',
+        name: 'Jane Doe',
+        date: '2019-01-02'
+      },
+      {
+        id: 3,
+        rating: 3,
+        title: 'Average product',
+        comment: 'This product is average!',
+        name: 'Jack Doe',
+        date: '2019-01-03'
+      },
+      {
+        id: 4,
+        rating: 2,
+        title: 'Bad product',
+        comment: 'This product is bad!',
+        name: 'Joe Doe',
+        date: '2019-01-04'
+      },
+      {
+        id: 5,
+        rating: 1,
+        title: 'Terrible product',
+        comment: 'This product is terrible!',
+        name: 'Jill Doe',
+        date: '2019-01-05'
+      }
+    ];
   }
 
   // Initialize the customer reviews
