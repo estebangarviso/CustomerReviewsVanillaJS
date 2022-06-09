@@ -1,5 +1,5 @@
 // Change variables prefix
-$variable-prefix: 'theme';
+$variable-prefix: 'theme-';
 // Colors
 $primary: #1c1c1c;
 $secondary: #ffe002;
@@ -9,6 +9,7 @@ $warning: #ff9a52;
 $danger: #dc3545;
 $light: #f5edd3;
 $dark: #352b0b;
+$min-contrast-ratio: 3;
 
 // Typography and Headings
 $font-size-root: 16px;

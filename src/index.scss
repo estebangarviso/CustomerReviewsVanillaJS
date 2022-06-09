@@ -10,58 +10,76 @@
 @import './assets/scss/components/stars.scss';
 @import './assets/scss/components/reviews.scss';
 @import './assets/scss/components/forms.scss';
+@import './assets/scss/components/form-control.scss';
+@import './assets/scss/components/notifications.scss';
 // Custom styles
 hr {
-  color: var(--#{$variable-prefix}gray-300);
+  color: $gray-500;
 }
 
 #app {
-  max-width: var(--#{$variable-prefix}container-max-width);
+  @include make-container();
+  max-width: 1280px;
+  margin-top: 15px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  margin: 15px auto;
-  padding: 15px;
-  border: 1px solid var(--#{$variable-prefix}border-color);
-  border-radius: var(--#{$variable-prefix}border-radius);
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
 }
 
 .container {
-  max-width: var(--#{$variable-prefix}container-max-width);
-  width: 100%;
+  @include make-container();
 }
 
 .row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  @include make-row();
 }
 
 .col {
-  flex: 1;
-  padding: 0.5rem;
+  @include make-col();
 }
 
 .pl-1 {
   padding-left: 1rem;
 }
 
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
 .d-flex {
   display: flex;
+}
+
+.me-auto {
+  margin-right: auto !important;
 }
 
 .align-items-center {
   align-items: center;
 }
 
+@each $color, $value in $theme-colors {
+  .link-#{$color} {
+    color: $value;
+
+    @if $link-shade-percentage != 0 {
+      &:hover,
+      &:focus {
+        color: if(
+          color-contrast($value) == $color-contrast-light,
+          shade-color($value, $link-shade-percentage),
+          tint-color($value, $link-shade-percentage)
+        );
+      }
+    }
+  }
+}
 .link {
-  color: var(--#{$variable-prefix}link-color);
   text-decoration: none;
   transition: color 0.2s ease-in-out;
   cursor: pointer;
-}
-
-.link:hover {
-  color: var(--#{$variable-prefix}link-hover-color);
 }
 
 #add-customer-review {
@@ -77,5 +95,36 @@ hr {
     .star:hover ~ .star path {
       fill: var(--#{$variable-prefix}gray-300) !important;
     }
+  }
+}
+.btn-close {
+  box-sizing: content-box;
+  width: $btn-close-width;
+  height: $btn-close-height;
+  padding: $btn-close-padding-y $btn-close-padding-x;
+  color: $btn-close-color;
+  background: transparent escape-svg($btn-close-bg) center / $btn-close-width auto no-repeat; // include transparent for button elements
+  border: 0; // for button elements
+  @include border-radius();
+  opacity: $btn-close-opacity;
+
+  // Override <a>'s hover style
+  &:hover {
+    color: $btn-close-color;
+    text-decoration: none;
+    opacity: $btn-close-hover-opacity;
+  }
+
+  &:focus {
+    outline: 0;
+    box-shadow: $btn-close-focus-shadow;
+    opacity: $btn-close-focus-opacity;
+  }
+
+  &:disabled,
+  &.disabled {
+    pointer-events: none;
+    user-select: none;
+    opacity: $btn-close-disabled-opacity;
   }
 }

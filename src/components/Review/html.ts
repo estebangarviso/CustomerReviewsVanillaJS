@@ -1,4 +1,4 @@
-import Stars from '../Stars';
+import Stars from '../Stars/html';
 
 const Template = (review: ReviewProps) => {
   const { rating, title, name, date, comment } = review;

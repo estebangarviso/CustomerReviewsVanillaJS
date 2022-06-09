@@ -18,18 +18,34 @@ type ModalAddReviewProps = {
 };
 
 interface CustomerReviewsInterface {
-  _customerReviews: ReviewProps[];
-  init(): void;
   get customerReviews(): ReviewProps[];
   get averageRating(): number;
   get numberOfReviews(): number;
   addReview(review: ReviewProps): void;
   getCustomerReviewById(id: number): ReviewProps;
   updateReviewById(id: number, review: ReviewProps): void;
-  render(): void;
 }
 
-interface ReviewInterface {
-  _props: ReviewProps;
-  render(): string;
-}
+type FormDefinitionField = {
+  label: string;
+  name: string;
+  value: FormDataEntryValue;
+  required: boolean;
+  validate?: string;
+  type?: string;
+  tagName?: string;
+  append?: string;
+  prepend?: string;
+};
+
+type FormDefinition = FormDefinitionField[];
+
+type FormValidate = { isValid: boolean; errors: string[] | [] };
+
+type FormFieldElements = HTMLInputElement | HTMLTextAreaElement;
+
+type NotificationsProps = {
+  type: 'success' | 'danger' | 'warning' | 'info';
+  message: string;
+  title?: string;
+};

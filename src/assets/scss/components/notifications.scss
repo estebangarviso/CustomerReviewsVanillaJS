@@ -1,0 +1,64 @@
+#notifications {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 1rem;
+  height: 100vh;
+  overflow: hidden;
+  > .notification {
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-bottom: 1rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .notification {
+    width: $toast-max-width;
+    max-width: 100%;
+    @include font-size($toast-font-size);
+    color: $toast-color;
+    pointer-events: auto;
+    background-color: $toast-background-color;
+    background-clip: padding-box;
+    border: $toast-border-width solid $toast-border-color;
+    box-shadow: $toast-box-shadow;
+    @include border-radius($toast-border-radius);
+
+    &:not(.showing):not(.show) {
+      opacity: 0;
+    }
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  @each $color, $value in $theme-colors {
+    .notification-#{$color} {
+      background-color: #{$value};
+      color: if(color-contrast($value) == $color-contrast-light, $color-contrast-light, $color-contrast-dark);
+      &:hover {
+        background-color: #{darken($value, 15%)};
+      }
+    }
+  }
+
+  .notification-header {
+    display: flex;
+    align-items: center;
+    padding: $toast-padding-y $toast-padding-x;
+    background-clip: padding-box;
+    border-bottom: $toast-border-width solid $toast-header-border-color;
+    @include border-top-radius(subtract($toast-border-radius, $toast-border-width));
+
+    .btn-close {
+      margin-right: $toast-padding-x * -0.5;
+      margin-left: $toast-padding-x;
+    }
+  }
+  .notification-body {
+    padding: $toast-padding-x; // apply to both vertical and horizontal
+    word-wrap: break-word;
+  }
+}

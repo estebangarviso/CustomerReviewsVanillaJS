@@ -1,5 +1,6 @@
 // Build webpack config with as .ts file
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import { Configuration } from 'webpack';
@@ -14,11 +15,11 @@ const config: Configuration = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
-    clean: true,
+    clean: true
   },
   devtool: 'source-map',
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
   module: {
     rules: [
@@ -28,48 +29,42 @@ const config: Configuration = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-typescript'],
-          },
-        },
-      },
-      {
-        test: /\.ts$/i,
-        exclude: path.resolve(__dirname, 'node_modules'),
-        use: {
-          loader: 'ts-loader',
-        },
-      },
-      {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+            presets: ['@babel/preset-env', '@babel/preset-typescript']
+          }
+        }
       },
       {
         test: /\.(css|scss)$/,
         use: [
           {
-            loader: 'style-loader', // creates style nodes from JS strings
+            loader: 'style-loader' // creates style nodes from JS strings
           },
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              esModule: false,
-            },
+              esModule: false
+            }
           },
           {
             loader: 'css-loader', // translates CSS into CommonJS
             options: {
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           {
             loader: 'postcss-loader', // Run post css actions
             options: {
               sourceMap: true,
               postcssOptions: {
-                plugins: ['autoprefixer'],
-              },
-            },
+                plugins: ['autoprefixer']
+              }
+            }
+          },
+          {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: true
+            }
           },
           {
             loader: 'sass-loader', // compiles Sass to CSS
@@ -77,23 +72,31 @@ const config: Configuration = {
               sourceMap: true,
               implementation: require.resolve('dart-sass'),
               sassOptions: {
-                includePaths: [path.resolve(__dirname, './node_modules')],
-              },
-            },
-          },
-        ],
-      },
-    ],
+                includePaths: [path.resolve(__dirname, './node_modules')]
+              }
+            }
+          }
+        ]
+      }
+    ]
   },
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src', 'favicon'),
+          to: path.resolve(__dirname, 'public', 'favicon')
+        }
+      ]
+    }),
     new HtmlWebpackPlugin({
       inject: 'body',
-      template: './index.html',
+      template: './index.html'
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-    }),
-  ],
+      filename: '[name].css'
+    })
+  ]
 };
 
 export default config;

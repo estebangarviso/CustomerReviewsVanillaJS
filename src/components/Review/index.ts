@@ -1,10 +1,12 @@
-import Template from './template';
-export default class Review implements ReviewInterface {
+import Component from '../../helper/Component';
+import html from './html';
+export default class Review extends Component {
   // Private variables
-  _props: ReviewProps;
+  private _props: ReviewProps;
 
   // Constructor
   constructor(props: ReviewProps) {
+    super();
     this._props = props;
   }
 
@@ -48,6 +50,6 @@ export default class Review implements ReviewInterface {
   // Getter methods - end
 
   render() {
-    return Template(this as ReviewProps);
+    return html(this as ReviewProps);
   }
 }

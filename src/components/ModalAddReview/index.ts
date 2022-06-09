@@ -1,13 +1,14 @@
-import Template from './template';
-export default class ModalAddReview {
+import html from './html';
+import Component from '../../helper/Component';
+import ReviewForm from '../ReviewForm';
+//!TODO: Separate the form from the modal
+export default class ModalAddReview extends Component {
   // Private variables
-  _isOpen = false;
-
-  // Getters methods - start
+  private _children: ReviewForm | undefined;
+  _isOpen: boolean = false;
   get isOpen() {
     return this._isOpen;
   }
-  // Getters methods - end
 
   open() {
     if (this._isOpen) return;
@@ -21,6 +22,7 @@ export default class ModalAddReview {
     );
     // Show the modal
     modal?.classList.add('show');
+    modal.style.display = 'block';
   }
 
   close() {
@@ -35,30 +37,32 @@ export default class ModalAddReview {
     backdrop?.classList.remove('show');
     setTimeout(() => {
       backdrop?.remove();
+      modal.style.display = 'none';
     }, 300);
   }
 
-  init() {
-    document.body.innerHTML += this.render();
-    this.addEventListeners();
-  }
-
   render() {
-    return Template();
+    if (!this._children) {
+      this._children = new ReviewForm();
+    }
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      html({
+        title: 'Add Review',
+        footer: this._children.renderSubmit()
+      })
+    );
+    const modal = document.getElementById('modal-add-review');
+    modal.querySelector('.modal-body')?.appendChild(this._children.render());
+    this._children.addEventListeners();
   }
 
   addEventListeners() {
     const modal = document.getElementById('modal-add-review');
-    const form = document.getElementById('form-customer-review') as HTMLFormElement;
     const closeButton = modal?.querySelector('[data-dismiss="modal"]');
+    const form = document.getElementById('form-customer-review') as HTMLFormElement;
     const saveButton = modal?.querySelector('[data-submit="form-customer-review"]');
-
-    // Because Modal is going to render first we need to attach on click event to body document. So open the modal if the user clicks on the Add Review button ID add-customer-review
-    document.body.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).id === 'add-customer-review') {
-        this.open();
-      }
-    });
+    const review_stars = form?.querySelectorAll('.stars .star');
 
     closeButton?.addEventListener('click', () => {
       this?.close();
@@ -67,13 +71,6 @@ export default class ModalAddReview {
     saveButton?.addEventListener('click', () => {
       // Trigger the form submit event
       form?.dispatchEvent(new Event('submit'));
-    });
-
-    form?.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(form as HTMLFormElement);
-
-      console.log(formData);
     });
   }
 }

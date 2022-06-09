@@ -15,15 +15,16 @@
   &[data-rating='0'] .star path {
     fill: var(--#{$variable-prefix}gray-300);
   }
+  $half-steps: 0;
   @for $rating from 1 through 5 {
-    $i: 0.5;
-    &[data-rating='#{$i}'] .star:nth-child(#{$rating}) ~ .star path,
-    &[data-rating='#{$i}'] .star:nth-child(#{$rating}) path:nth-child(1) {
+    $half-steps: $half-steps + 0.5;
+    &[data-rating='#{$half-steps}'] .star:nth-child(#{$rating}) ~ .star path,
+    &[data-rating='#{$half-steps}'] .star:nth-child(#{$rating}) path:nth-child(1) {
       fill: var(--#{$variable-prefix}gray-300);
     }
-    &[data-rating='#{$i + 0.5}'] .star:nth-child(#{$rating}) ~ .star path {
+    &[data-rating='#{$half-steps + 0.5}'] .star:nth-child(#{$rating}) ~ .star path {
       fill: var(--#{$variable-prefix}gray-300);
     }
-    $i: $i + 0.5;
+    $half-steps: $half-steps + 0.5;
   }
 }
