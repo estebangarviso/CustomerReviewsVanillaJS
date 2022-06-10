@@ -119,7 +119,9 @@ const config = (_: Configuration, argv: { mode: 'development' | 'production' }):
       // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
       new InterpolateHtmlPlugin({
-        PUBLIC_URL: isProduction ? process.env.PUBLIC_URL ?? process.env.npm_package_homepage : '/'
+        PUBLIC_URL: isProduction
+          ? process.env.PUBLIC_URL ?? process.env.VERCEL_URL ?? process.env.npm_package_homepage
+          : '/'
         // You can pass any key-value pairs, this was just an example.
         // WHATEVER: 42 will replace %WHATEVER% with 42 in index.html.
       }),
