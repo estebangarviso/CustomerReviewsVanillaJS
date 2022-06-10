@@ -2,8 +2,10 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import FaviconWebpackPlugin from 'favicons-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import InterpolateHtmlPlugin from 'interpolate-html-plugin';
 import path from 'path';
 import { Configuration } from 'webpack';
+import { homepage } from '../package.json';
 
 // Rename __dirname to root path of project
 __dirname = path.resolve(__dirname + '/../');
@@ -11,7 +13,18 @@ __dirname = path.resolve(__dirname + '/../');
 // Output path
 const outputPath = path.resolve(__dirname, 'public');
 
+// Get package.json as object
+const packageJson = require(path.resolve(__dirname, 'package.json'));
+
 const config = (_: Configuration, argv: { mode: 'development' | 'production' }): Configuration => {
+  const isProduction = argv.mode === 'production';
+
+  let PUBLIC_URL = '/';
+  if (isProduction) {
+    console.log('Production mode');
+    PUBLIC_URL = homepage;
+  }
+
   let config = {
     context: path.resolve(__dirname, 'src'),
     entry: './index.ts',
@@ -23,18 +36,26 @@ const config = (_: Configuration, argv: { mode: 'development' | 'production' }):
     },
     devtool: 'source-map',
     devServer: {
-      contentBase: outputPath,
-      historyApiFallback: true,
-      host: `${process.env.HOST || 'localhost'}`,
-      port: 3000,
+      client: {
+        overlay: {
+          warnings: false,
+          errors: true
+        }
+      },
       proxy: {
         '/api': {
-          target: 'http://localhost:8080',
+          target: 'http://127.0.0.1:8000',
+          changeOrigin: true,
+          secure: false,
           pathRewrite: {
-            '^/api': ''
+            '^/api': '/api'
           }
         }
-      }
+      },
+      static: {
+        directory: outputPath
+      },
+      hot: true
     },
     resolve: {
       extensions: ['.ts', '.js']
@@ -102,6 +123,13 @@ const config = (_: Configuration, argv: { mode: 'development' | 'production' }):
       new HtmlWebpackPlugin({
         inject: 'body',
         template: './index.html'
+      }),
+      // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
+      // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
+      new InterpolateHtmlPlugin({
+        PUBLIC_URL
+        // You can pass any key-value pairs, this was just an example.
+        // WHATEVER: 42 will replace %WHATEVER% with 42 in index.html.
       }),
       new FaviconWebpackPlugin({
         logo: path.resolve(__dirname, 'src', 'assets', 'img', 'favicon.svg'),

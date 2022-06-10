@@ -30,6 +30,7 @@
     "favicons": "^6.2.2",
     "favicons-webpack-plugin": "^5.0.2",
     "html-webpack-plugin": "^5.5.0",
+    "interpolate-html-plugin": "^4.0.0",
     "mini-css-extract-plugin": "^2.6.0",
     "postcss-loader": "^7.0.0",
     "resolve-url-loader": "^5.0.0",
