@@ -5,25 +5,17 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import InterpolateHtmlPlugin from 'interpolate-html-plugin';
 import path from 'path';
 import { Configuration } from 'webpack';
-import { homepage } from '../package.json';
+// Read .env file and set environment variables
+require('dotenv').config();
 
 // Rename __dirname to root path of project
-__dirname = path.resolve(__dirname + '/../');
+__dirname = path.resolve(__dirname, '..');
 
 // Output path
 const outputPath = path.resolve(__dirname, 'public');
 
-// Get package.json as object
-const packageJson = require(path.resolve(__dirname, 'package.json'));
-
 const config = (_: Configuration, argv: { mode: 'development' | 'production' }): Configuration => {
   const isProduction = argv.mode === 'production';
-
-  let PUBLIC_URL = '/';
-  if (isProduction) {
-    console.log('Production mode');
-    PUBLIC_URL = homepage;
-  }
 
   let config = {
     context: path.resolve(__dirname, 'src'),
@@ -127,7 +119,7 @@ const config = (_: Configuration, argv: { mode: 'development' | 'production' }):
       // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
       new InterpolateHtmlPlugin({
-        PUBLIC_URL
+        PUBLIC_URL: isProduction ? process.env.PUBLIC_URL ?? process.env.npm_package_homepage : '/'
         // You can pass any key-value pairs, this was just an example.
         // WHATEVER: 42 will replace %WHATEVER% with 42 in index.html.
       }),

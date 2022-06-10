@@ -128,6 +128,8 @@ _Below is an example of how you can instruct your audience on installing and set
 
 See the [open issues](https://github.com/estebangarviso/CustomerReviewsVanillaJS/issues) for a full list of proposed features (and known issues).
 
+You can change PUBLIC_URL to your domain name in your app deploy provider Dashboard > "YourApp" > Settings > Environment Variables. In this project I use [Vercel](https://www.vercel.com/).
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
