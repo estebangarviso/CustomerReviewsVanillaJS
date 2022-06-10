@@ -1,6 +1,6 @@
 // Build webpack config with as .ts file
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import FaviconWebpackPlugin from 'favicons-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import { Configuration } from 'webpack';
@@ -81,17 +81,14 @@ const config: Configuration = {
     ]
   },
   plugins: [
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'src', 'favicon'),
-          to: path.resolve(__dirname, 'public', 'favicon')
-        }
-      ]
-    }),
     new HtmlWebpackPlugin({
       inject: 'body',
       template: './index.html'
+    }),
+    new FaviconWebpackPlugin({
+      logo: path.resolve(__dirname, 'src', 'assets', 'img', 'favicon.svg'),
+      prefix: 'favicon-[hash:8]/',
+      inject: true
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'

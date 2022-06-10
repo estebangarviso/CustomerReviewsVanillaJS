@@ -1,23 +1,22 @@
-import Component from '../../helper/Component';
-import Validate from '../../helper/Validate';
+import Component from '../../helpers/Component';
+import Validate from '../../helpers/Validate';
 import FormField from './FormField';
 import App from '../..';
 
 export default abstract class Form extends Component {
-  private _form: HTMLFormElement;
+  static DEFAULT_VALIDATION_METHOD = 'isGenericName';
+
   private _errors: { name: FormDefinitionField['name']; message: string }[] = [];
   public definition: FormDefinition;
   public formFields: FormField[] = [];
-  public get form() {
-    return this._form;
-  }
 
-  public set form(form: HTMLFormElement) {
-    this._form = form;
-  }
+  public state: {
+    form: HTMLFormElement;
+    button: HTMLButtonElement;
+  };
 
   public reset = () => {
-    this.form.reset();
+    this.state.form.reset();
     this.afterReset();
   };
 
@@ -39,7 +38,7 @@ export default abstract class Form extends Component {
     return this.definition;
   }
 
-  public getValues(): { [key: string]: number | string | boolean } {
+  public getValues(): { [key: string]: string } {
     const values = {};
     this.definition.forEach((field) => {
       values[field.name] = field.value;
@@ -66,7 +65,7 @@ export default abstract class Form extends Component {
   }
 
   public validate(): FormValidate {
-    const formData = new FormData(this.form as HTMLFormElement);
+    const formData = new FormData(this.state.form as HTMLFormElement);
 
     this.beforeValidate(formData);
 
@@ -83,18 +82,22 @@ export default abstract class Form extends Component {
         result.isValid = false;
 
         // Add errors to field
-        formField.error = { error: `${field.label} is required` };
-      } else if (!Validate[field.validate](field.value)) {
+        formField.error = `${field.label} is required`;
+      } else if (!Validate[field.validate ?? Form.DEFAULT_VALIDATION_METHOD](field.value)) {
         // Add errors to form
         this._errors.push({ name: field.name, message: `${field.label} is invalid` });
         result.isValid = false;
 
         // Add errors to field
-        formField.error = { error: `${field.label} is invalid` };
+        formField.error = `${field.label} is invalid`;
       }
     });
 
     if (!result.isValid) {
+      const firstInputTagElementWithError = this.formFields.find((field) => field.name === this._errors[0].name).state
+        .inputTagElement;
+      firstInputTagElementWithError.reportValidity(); // it shows the error message in the input depending on the browser
+      firstInputTagElementWithError.focus(); // it focuses the input
       App.Notifications.add({
         type: 'danger',
         title: 'Error',
@@ -108,25 +111,14 @@ export default abstract class Form extends Component {
   }
 
   afterValidate(result: FormValidate) {
-    console.log({ result });
-
-    const resetErrors = (hook) => {
-      // Remove errors from form to avoid duplicate errors
-      this._errors = [];
-      this.formFields.forEach((field) => {
-        if (hook === 'reset') {
-          field.error = { hook };
-        } else {
-          field.error = { error: '' };
-        }
-      });
-    };
+    this._errors = [];
+    this.formFields.forEach((field) => {
+      field.error = '';
+    });
     if (result.isValid) {
-      this.form.classList.remove('was-validated');
-      resetErrors('isvalid');
+      this.state.form.classList.remove('was-validated');
     } else {
-      this.form.classList.add('was-validated');
-      resetErrors('reset');
+      this.state.form.classList.add('was-validated');
     }
 
     return result;

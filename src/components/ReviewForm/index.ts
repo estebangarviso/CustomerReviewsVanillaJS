@@ -1,6 +1,6 @@
 import App from '../..';
-import Form from '../Form/Form';
-import FormField from '../Form/FormField';
+import Form from '../../core/Form/Form';
+import FormField from '../../core/Form/FormField';
 import Stars from '../Stars/html';
 
 export default class ReviewForm extends Form {
@@ -9,24 +9,27 @@ export default class ReviewForm extends Form {
     {
       label: 'Rating',
       name: 'review_rating',
-      value: undefined,
       validate: 'isRating',
       required: true,
       type: 'hidden',
       append: Stars()
     },
-    { label: 'Name', name: 'review_name', value: undefined, validate: 'isName', required: true },
-    { label: 'Title', name: 'review_title', value: undefined, required: true },
+    { label: 'Name', name: 'review_name', validate: 'isName', required: true },
+    { label: 'Title', name: 'review_title', required: true },
     {
       label: 'Comment',
       name: 'review_comment',
-      value: undefined,
       required: true,
       tagName: 'textarea',
       rows: 3,
       placeholder: 'Excellent product and fast delivery!'
     }
   ];
+
+  public state: {
+    form: HTMLFormElement;
+    button: HTMLButtonElement;
+  };
 
   constructor() {
     super();
@@ -37,50 +40,83 @@ export default class ReviewForm extends Form {
   }
 
   afterReset() {
-    const stars = this.form?.querySelector('.stars') as HTMLElement;
+    const stars = this.state.form?.querySelector('.stars') as HTMLElement;
     stars.dataset.rating = '0';
-    this.form?.querySelector('#review_rating')?.setAttribute('value', '0');
+    this.state.form?.querySelector('#review_rating')?.setAttribute('value', '0');
   }
 
-  public render() {
-    this.template.assign = /* HTML */ ` <form id="${this.id}" class="needs-validation" novalidate></form> `;
+  public renderForm(): HTMLFormElement {
+    this.template.assign = { str: /* HTML */ ` <form id="${this.id}" class="needs-validation" novalidate></form> ` };
     this.formFields.forEach((field) => {
-      this.template.append = field.render();
+      this.template.append = field.renderForm();
     });
-    this.form = this.template.render as HTMLFormElement;
-    return this.template.render;
+    this.setState({ form: this.template.render as HTMLFormElement });
+
+    this.afterFormSetState(this.state.form);
+
+    return this.state.form;
   }
 
-  public renderSubmit() {
-    return `
-    <button type="button" class="btn btn-primary" data-submit="${this.id}">Submit Review</button>
-    `;
+  public renderSubmit(): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-primary');
+    button.setAttribute('type', 'button');
+    button.innerText = 'Submit Review';
+    this.setState({ button });
+
+    // Add event listener to the button, render form before adding event listener
+    this.state.button.addEventListener('click', () => this.state.form.dispatchEvent(new Event('submit')));
+    return this.state.button;
   }
 
-  public addEventListeners() {
-    const saveButton = this.form?.querySelector(`[data-submit="${this.id}"]`);
-    const review_stars = this.form?.querySelectorAll('.stars .star');
+  private get formattedValues(): ReviewProps {
+    const date = new Date();
+    const values = this.getValues() as {
+      review_comment: string;
+      review_name: string;
+      review_title: string;
+      review_rating: string;
+    };
+    // Remove prefix 'review_' from the keys
+    const formattedValues = Object.keys(values).reduce((acc, key) => {
+      acc[key.replace('review_', '')] = values[key];
+      return acc;
+    }, {} as ReviewProps);
+    // Casing
+    formattedValues.name = formattedValues.name.toProperCase();
+    formattedValues.title = formattedValues.title.toProperCase();
+    formattedValues.comment = formattedValues.comment.toSentenceCase();
+    // Add next id and datestamp
+    const result = {
+      ...formattedValues,
+      id: App.CustomerReviews.numberOfReviews + 1,
+      date: `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1}-${
+        date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+      }`
+    };
+    return result;
+  }
 
-    saveButton?.addEventListener('click', () => this.form.dispatchEvent(new Event('submit')));
+  public afterFormSetState(form: HTMLFormElement) {
+    const review_stars = form.querySelectorAll('.stars .star');
 
     review_stars?.forEach((star) => {
-      star.addEventListener('click', (event) => {
+      star.addEventListener('click', (event: Event) => {
         const star = event.currentTarget as HTMLElement;
         const value = star.dataset.rating;
-        const stars = this.form?.querySelector('.stars') as HTMLElement;
-        this.form.querySelector('#review_rating')?.setAttribute('value', value);
+        const stars = form?.querySelector('.stars') as HTMLElement;
+        form.querySelector('#review_rating')?.setAttribute('value', value);
         stars.dataset.rating = value;
       });
     });
 
-    this.form?.addEventListener('submit', (event) => {
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
       const validate = this.validate();
       if (!validate.isValid) return;
 
-      const review = this.getValues() as ReviewProps;
-      App.CustomerReviews.addReview(review);
-      App.ModalAddReview.close();
+      App.CustomerReviews.addReview(this.formattedValues);
+      App.ModalAddReview.closeModal();
 
       // Reset the form
       this.reset();

@@ -1,3 +1,4 @@
+import './core/Extensions';
 import ModalAddReview from './components/ModalAddReview';
 import Notifications from './components/Notifications';
 import CustomerReviews from './components/CustomerReviews';

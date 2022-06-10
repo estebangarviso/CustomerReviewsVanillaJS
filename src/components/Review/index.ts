@@ -1,35 +1,33 @@
-import Component from '../../helper/Component';
+import Component from '../../helpers/Component';
 import html from './html';
 export default class Review extends Component {
-  // Private variables
-  private _props: ReviewProps;
+  public state: ReviewProps;
 
-  // Constructor
-  constructor(props: ReviewProps) {
+  constructor(state: ReviewProps) {
     super();
-    this._props = props;
+    this.setState({ ...state });
   }
 
   // Getters methods - start
 
   // Id
   get id() {
-    return this._props.id;
+    return this.state.id;
   }
 
   // Rating
   get rating() {
-    return this._props.rating;
+    return this.state.rating;
   }
 
   // Title
   get title() {
-    return this._props.title;
+    return this.state.title;
   }
 
   // Name
   get name() {
-    return this._props.name;
+    return this.state.name;
   }
 
   // Date
@@ -38,18 +36,18 @@ export default class Review extends Component {
       year: 'numeric',
       month: 'long',
       day: '2-digit'
-    }).format(new Date(this._props.date));
+    }).format(new Date(this.state.date));
     return date;
   }
 
   // Comment
   get comment() {
-    return this._props.comment;
+    return this.state.comment;
   }
 
   // Getter methods - end
 
-  render() {
+  renderForm() {
     return html(this as ReviewProps);
   }
 }

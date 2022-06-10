@@ -1,9 +1,11 @@
 import html from './html';
-import Component from '../../helper/Component';
+import Component from '../../helpers/Component';
 export default class Notifications extends Component {
+  public get container() {
+    return document.getElementById('notifications');
+  }
   public add({ type, title, message }: NotificationsProps) {
-    const container = document.getElementById('notifications');
-    this.template.assign = html({ type, title, message });
+    this.template.assign = { str: html({ type, title, message }), refresh: true };
     const notification = this.template.render;
     const handleRemove = () => {
       // Remove show class
@@ -21,14 +23,14 @@ export default class Notifications extends Component {
         handleRemove();
       }, 10000);
     };
-    container.appendChild(notification);
+    this.container.appendChild(notification);
 
     // If click on close button, remove notification
     notification.querySelector('.btn-close').addEventListener('click', handleRemove);
 
     handleShow();
   }
-  render() {
+  renderForm() {
     document.body.insertAdjacentHTML('beforeend', /* HTML */ ` <div id="notifications"></div> `);
   }
 }

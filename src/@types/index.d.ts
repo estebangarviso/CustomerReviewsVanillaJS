@@ -12,6 +12,14 @@ type CustomerReviewsProps = {
   numberOfReviews: number;
 };
 
+type ModalState = {
+  isOpen: boolean;
+  title: string | null;
+  body: HTMLElement | undefined;
+  footer: HTMLElement | undefined;
+  modal: HTMLElement | undefined;
+};
+
 type ModalAddReviewProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -29,7 +37,7 @@ interface CustomerReviewsInterface {
 type FormDefinitionField = {
   label: string;
   name: string;
-  value: FormDataEntryValue;
+  value?: FormDataEntryValue;
   required: boolean;
   validate?: string;
   type?: string;
@@ -49,3 +57,10 @@ type NotificationsProps = {
   message: string;
   title?: string;
 };
+
+// Extensions
+
+interface String {
+  toProperCase(): string;
+  toSentenceCase(): string;
+}

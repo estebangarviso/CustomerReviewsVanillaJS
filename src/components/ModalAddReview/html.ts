@@ -1,4 +1,3 @@
-import Stars from '../Stars/html';
 const Template = ({ title, body, footer }: { title?: string; body?: string; footer?: string }) => {
   return /* HTML */ `
     <div class="modal fade" id="modal-add-review" role="dialog">

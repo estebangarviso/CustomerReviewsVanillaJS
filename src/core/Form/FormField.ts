@@ -1,5 +1,5 @@
 import App from '../..';
-import Component from '../../helper/Component';
+import Component from '../../helpers/Component';
 
 export default class FormField extends Component {
   label: string;
@@ -10,7 +10,10 @@ export default class FormField extends Component {
   tagName: string = 'input';
   prepend: string;
   append: string;
-  inputTagElement: FormFieldElements;
+  state: {
+    inputTagElement: FormFieldElements;
+    element: HTMLElement;
+  };
 
   private _value: string;
   private _otherProps: any = {};
@@ -36,31 +39,26 @@ export default class FormField extends Component {
     return undefined;
   }
 
-  public set error({ error, hook }: { error?: string; hook?: 'reset' }) {
-    if (hook === 'reset') this._error = '';
-    else {
-      this._error = error;
+  public set error(errorMessage: string) {
+    this._error = errorMessage;
 
-      if (this.inputTagElement) {
-        console.log({ error, isValid: this.isValid });
-
-        if (this.isValid) {
-          this.inputTagElement.classList.remove('is-valid');
-          this.inputTagElement.classList.add('is-invalid');
-        } else {
-          this.inputTagElement.classList.remove('is-invalid');
-          this.inputTagElement.classList.add('is-valid');
-          this.inputTagElement.setCustomValidity(error);
-          this.inputTagElement.reportValidity();
-        }
+    if (this.state.inputTagElement) {
+      if (!this.isValid) {
+        this.state.inputTagElement.classList.add('is-invalid');
+        this.state.inputTagElement.classList.remove('is-valid');
+        this.state.inputTagElement.setCustomValidity(errorMessage); // this is for HTML5 validation add :invalid CSS to the input
+      } else {
+        this.state.inputTagElement.classList.remove('is-invalid');
+        this.state.inputTagElement.classList.add('is-valid');
+        this.state.inputTagElement.setCustomValidity(''); // empty string for HTML5 validation add :valid CSS to the input
       }
+    }
 
-      if (this.element) {
-        const feedback = this.element.querySelector('.invalid-feedback');
+    if (this.state.element) {
+      const feedback = this.state.element.querySelector('.invalid-feedback');
 
-        if (feedback) {
-          feedback.innerHTML = this._error;
-        }
+      if (feedback) {
+        feedback.innerHTML = this._error;
       }
     }
   }
@@ -121,14 +119,16 @@ export default class FormField extends Component {
     if (otherProps) this._otherProps = otherProps;
   }
 
-  render() {
-    this.template.assign = /* HTML */ `
-      <div class="mb-1">
-        <div class="input-group">
-          ${this.prependTag ? this.prependTag : ''} ${this.inputTag} ${this.appendTag ? this.appendTag : ''}
+  renderForm() {
+    this.template.assign = {
+      str: /* HTML */ `
+        <div class="mb-1">
+          <div class="input-group">
+            ${this.prependTag ? this.prependTag : ''} ${this.inputTag} ${this.appendTag ? this.appendTag : ''}
+          </div>
         </div>
-      </div>
-    `;
+      `
+    };
     const template = this.template.render;
     let inputTag = template.querySelector(`#${this.name}`);
     if (!inputTag) {
@@ -138,8 +138,9 @@ export default class FormField extends Component {
         return;
       }
     }
-    this.inputTagElement = inputTag;
-    this.element = template;
-    return this.element;
+    // this.state.inputTagElement = inputTag;
+    // this.state.element = template;
+    this.setState({ inputTagElement: inputTag, element: template });
+    return template;
   }
 }
