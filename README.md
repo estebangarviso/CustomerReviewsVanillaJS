@@ -1,4 +1,14 @@
 <div id="top"></div>
+
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -10,13 +20,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/estebangarviso/CustomerReviewsVanillaJS">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="src/assets/img/favicon.svg" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Customer Reviews</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    An awesome project for learning advanced vanilla JavaScript.
     <br />
     <a href="https://github.com/estebangarviso/CustomerReviewsVanillaJS"><strong>Explore the docs »</strong></a>
     <br />
@@ -59,29 +69,27 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+A lightweight web app built with next-gen JS classes and use component patterns to create a responsive, mobile-friendly, and accessible Customer Reviews template.
 
-Here's why:
+How it works:
 
-- Your time should be focused on creating something amazing. A project that solves a problem and helps others
-- You shouldn't be doing the same tasks over and over like creating a README from scratch
-- You should implement DRY principles to the rest of your life :smile:
+- [x] Click on the "Add a Review" button it going to open a modal
+  - [x] Write a valid review, that it will show up in the list of errors if it's not valid with in a notification box and below each form field
+  - [x] Send the review to refresh the reviews list and save it in the local storage.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+You can change the methods where local storage functions are called to save the reviews in a database or in a JSON file or post it to an api endpoint.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This section should list any major frameworks/libraries used to bootstrap my project.
 
 - [HTML5](https://www.w3.org/TR/html5/)
-- [CSS3](https://www.w3.org/Style/CSS/)
 - [SCSS](https://sass-lang.com/)
-- [JavaScript](https://www.javascript.com/)
+- [Bootstrap Reboot](https://getbootstrap.com/docs/5.2/content/reboot/)
 - [TypeScript](https://www.typescriptlang.org)
+- [Webpack](https://webpack.js.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -151,9 +159,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Esteban Garviso - [Click me](https://github.com/estebangarviso)<span style="font-size:1.5rem"> 📇</span>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
